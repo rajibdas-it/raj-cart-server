@@ -24,16 +24,30 @@ async function run() {
   try {
     const categoryCollection = client.db("raj-cart").collection("categories");
     const productCollection = client.db("raj-cart").collection("products");
+
+    //category api
     app.get("/category", async (req, res) => {
       const query = {};
       const categories = await categoryCollection.find().toArray();
       res.send(categories);
     });
 
+    //getting product by category id api
+
+    app.get("/product-category-wise/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { categoryId: id };
+      const products = await productCollection.find(filter).toArray();
+      res.send(products);
+    });
+
+    //getting all product api
     app.get("/product", async (req, res) => {
       const products = await productCollection.find().toArray();
       res.send(products);
     });
+
+    //getting a single product api
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: ObjectId(id) };
